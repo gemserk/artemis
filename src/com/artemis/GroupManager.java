@@ -33,12 +33,16 @@ public class GroupManager {
 	}
 	
 	public void remove(Entity e) {
-		String group = groupByEntity.get(e.getId());
-		groupByEntity.set(e.getId(), null);
-		
-		Bag<Entity> entities = entitiesByGroup.get(group);
-		if(entities != null) {
-			entities.remove(e);
+		if(e.getId() < groupByEntity.size()) {
+			String group = groupByEntity.get(e.getId());
+			if(group != null) {
+				groupByEntity.set(e.getId(), null);
+				
+				Bag<Entity> entities = entitiesByGroup.get(group);
+				if(entities != null) {
+					entities.remove(e);
+				}
+			}
 		}
 	}
 
