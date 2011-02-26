@@ -41,8 +41,8 @@ public class World {
 	}
 
 	public void deleteEntity(Entity e) {
-		entityManager.remove(e);
 		groupManager.remove(e);
+		entityManager.remove(e);
 	}
 	
 	public Entity createEntity() {

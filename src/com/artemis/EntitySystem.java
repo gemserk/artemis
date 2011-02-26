@@ -49,11 +49,9 @@ public abstract class EntitySystem {
 	}
 
 	private void remove(Entity e) {
-		if ((systemBit & e.getSystemBits()) == systemBit) {
-			actives.remove(e);
-			e.removeSystemBit(systemBit);
-			removed(e);
-		}
+		actives.remove(e);
+		e.removeSystemBit(systemBit);
+		removed(e);
 	}
 
 	protected final void setWorld(World world) {

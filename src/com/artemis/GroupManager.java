@@ -45,5 +45,12 @@ public class GroupManager {
 			}
 		}
 	}
+	
+	public String getGroupOf(Entity e) {
+		if(e.getId() < groupByEntity.getCapacity()) {
+			return groupByEntity.get(e.getId());
+		}
+		return null;
+	}
 
 }

@@ -26,11 +26,10 @@ public class EntityManager {
 		Entity e = removedAndAvailable.removeLast();
 		if (e == null) {
 			e = new Entity(world, nextAvailableId++);
-			activeEntities.add(e);
 		} else {
-			activeEntities.set(e.getId(),e);
 			e.reset();
 		}
+		activeEntities.set(e.getId(),e);
 		count++;
 		totalCreated++;
 		return e;
@@ -38,7 +37,6 @@ public class EntityManager {
 
 	protected void remove(Entity e) {
 		activeEntities.set(e.getId(), null);
-		removedAndAvailable.add(e);
 		
 		e.setTypeBits(0);
 		
@@ -46,6 +44,8 @@ public class EntityManager {
 		
 		count--;
 		totalRemoved++;
+
+		removedAndAvailable.add(e);
 	}
 	
 	public boolean isActive(int entityId) {
