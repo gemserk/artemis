@@ -33,7 +33,7 @@ public class GroupManager {
 	}
 	
 	public void remove(Entity e) {
-		if(e.getId() < groupByEntity.size()) {
+		if(e.getId() < groupByEntity.getCapacity()) {
 			String group = groupByEntity.get(e.getId());
 			if(group != null) {
 				groupByEntity.set(e.getId(), null);

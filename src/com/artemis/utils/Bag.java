@@ -148,6 +148,15 @@ public class Bag<E> implements ImmutableBag<E> {
 	public int size() {
 		return size;
 	}
+	
+	/**
+	 * Returns the number of elements the bag can hold without growing.
+	 * 
+	 * @return the number of elements the bag can hold without growing.
+	 */
+	public int getCapacity() {
+		return data.length;
+	}
 
 	/**
 	 * Returns true if this list contains no elements.
