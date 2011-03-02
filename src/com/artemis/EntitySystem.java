@@ -13,6 +13,9 @@ public abstract class EntitySystem {
 	protected World world;
 
 	private Bag<Entity> actives;
+	
+	public EntitySystem() {
+	}
 
 	public EntitySystem(Class<? extends Component>... types) {
 		actives = new Bag<Entity>();
@@ -39,11 +42,11 @@ public abstract class EntitySystem {
 		boolean contains = (systemBit & e.getSystemBits()) == systemBit;
 		boolean interest = (typeFlags & e.getTypeBits()) == typeFlags;
 
-		if (interest && !contains) {
+		if (interest && !contains && typeFlags > 0) {
 			actives.add(e);
 			e.addSystemBit(systemBit);
 			added(e);
-		} else if (!interest && contains) {
+		} else if (!interest && contains && typeFlags > 0) {
 			remove(e);
 		}
 	}
