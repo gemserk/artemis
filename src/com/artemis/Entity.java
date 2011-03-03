@@ -79,7 +79,7 @@ public final class Entity {
 		return type.cast(getComponent(ComponentTypeManager.getTypeFor(type)));
 	}
 	
-	public void insert() {
+	public void refresh() {
 		entityManager.refresh(this);
 	}
 
