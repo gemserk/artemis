@@ -1,6 +1,15 @@
 package com.artemis;
 
-
+/**
+ * The primary instance for the framework. It contains all the managers.
+ * 
+ * You must use this to create, delete and retrieve entities.
+ * 
+ * It is also important to set the delta each game loop iteration.
+ * 
+ * @author Arni Arent
+ *
+ */
 public class World {
 	private SystemManager systemManager;
 	private EntityManager entityManager;
