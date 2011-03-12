@@ -2,6 +2,13 @@ package com.artemis;
 
 import com.artemis.utils.ImmutableBag;
 
+/**
+ * A system that processes entities at a interval in milliseconds.
+ * A typical usage would be a collision system or physics system.
+ * 
+ * @author Arni Arent
+ *
+ */
 public abstract class IntervalEntitySystem extends EntitySystem {
 	private int acc;
 	private int interval;
@@ -24,8 +31,11 @@ public abstract class IntervalEntitySystem extends EntitySystem {
 			intervalProcessAll(entities);
 		}
 	}
-	
+
+	/**
+	 * The entities to process.
+	 * @param entities read-only bag of entities.
+	 */
 	protected abstract void intervalProcessAll(ImmutableBag<Entity> entities);
-	
 
 }

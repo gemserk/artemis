@@ -1,5 +1,13 @@
 package com.artemis;
 
+/**
+ * High performance component retrieval from entities. Use this wherever you need
+ * to retrieve components from entities often and fast.
+ * 
+ * @author Arni Arent
+ *
+ * @param <T>
+ */
 public class ComponentMapper<T extends Component> {
 	private ComponentType type;
 	private EntityManager em;

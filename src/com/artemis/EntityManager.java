@@ -48,6 +48,12 @@ public class EntityManager {
 		removedAndAvailable.add(e);
 	}
 	
+	/**
+	 * Check if this entity is active, or has been deleted, within the framework.
+	 * 
+	 * @param entityId
+	 * @return active or not.
+	 */
 	public boolean isActive(int entityId) {
 		return activeEntities.get(entityId) != null;
 	}
@@ -92,14 +98,26 @@ public class EntityManager {
 		return activeEntities.get(entityId);
 	}
 	
+	/**
+	 * 
+	 * @return how many entities are currently active.
+	 */
 	public int getEntityCount() {
 		return count;
 	}
 	
+	/**
+	 * 
+	 * @return how many entities have been created since start.
+	 */
 	public long getTotalCreated() {
 		return totalCreated;
 	}
 	
+	/**
+	 * 
+	 * @return how many entities have been removed since start.
+	 */
 	public long getTotalRemoved() {
 		return totalRemoved;
 	}

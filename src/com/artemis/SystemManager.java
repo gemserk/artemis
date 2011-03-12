@@ -5,7 +5,13 @@ import java.util.Map;
 
 import com.artemis.utils.Bag;
 
-
+/**
+ * If you need to communicate with systems from other system, then look it up here.
+ * Use the world instance to retrieve a instance.
+ * 
+ * @author Arni Arent
+ *
+ */
 public class SystemManager {
 	private World world;
 	private Map<Class<?>, EntitySystem> systems;
@@ -32,6 +38,9 @@ public class SystemManager {
 		return bagged;
 	}
 	
+	/**
+	 * After adding all systems to the world, you must initialize them all.
+	 */
 	public void initializeAll() {
 		for(EntitySystem es : systems.values()) {
 			es.initialize();

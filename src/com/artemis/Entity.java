@@ -1,18 +1,28 @@
 package com.artemis;
 
+/**
+ * The entity class. Cannot be instantiated outside the framework, you must create new entities using World.
+ * 
+ * @author Arni Arent
+ *
+ */
 public final class Entity {
 	private int id;
 	private long typeBits;
 	private long systemBits;
-	private World world;
 	private EntityManager entityManager;
 	
 	protected Entity(World world, int id) {
-		this.world = world;
 		this.entityManager = world.getEntityManager();
 		this.id = id;
 	}
 
+	/**
+	 * The internal id for this entity within the framework. No other entity will have the same ID, but
+	 * ID's are however reused so another entity may acquire this ID if the previous entity was deleted.
+	 * 
+	 * @return id of the entity.
+	 */
 	public int getId() {
 		return id;
 	}
@@ -59,26 +69,55 @@ public final class Entity {
 		return "Entity["+id+"]";
 	}
 	
+	/**
+	 * Add a component to this entity.
+	 * @param component to add to this entity
+	 */
 	public void addComponent(Component component){
 		entityManager.addComponent(this, component);
 	}
 	
+	/**
+	 * Removes the component from this entity.
+	 * @param component to remove from this entity.
+	 */
 	public void removeComponent(Component component){
 		entityManager.removeComponent(this, component);
 	}
 	
+	/**
+	 * Checks if the entity has been deleted from somewhere.
+	 * @return if it's active.
+	 */
 	public boolean isActive(){
 		return entityManager.isActive(id);
 	}
 
+	/**
+	 * 
+	 * @param type in order to retrieve the component fast you must provide a ComponentType instance for the expected component.
+	 * @return
+	 */
 	public Component getComponent(ComponentType type) {
 		return entityManager.getComponent(this, type);
 	}
 	
+	/**
+	 * Slower retrieval of components from this entity. Minimize usage of this, but is fine to use e.g. when creating new entities
+	 * and setting data in components.
+	 * @param <T> the expected return component type.
+	 * @param type the expected return component type.
+	 * @return component that matches, or null if none is found.
+	 */
 	public <T extends Component> T getComponent(Class<T> type) {
 		return type.cast(getComponent(ComponentTypeManager.getTypeFor(type)));
 	}
 	
+	/**
+	 * Refresh all changes to components for this entity. After adding or removing components, you must call
+	 * this method. It will update all relevant systems.
+	 * It is typical to call this after adding components to a newly created entity.
+	 */
 	public void refresh() {
 		entityManager.refresh(this);
 	}
