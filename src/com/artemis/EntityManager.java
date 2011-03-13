@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.Bag;
+import com.artemis.utils.ImmutableBag;
 
 public class EntityManager {
 	private World world;
@@ -13,6 +14,8 @@ public class EntityManager {
 	private long totalRemoved;
 	
 	private Bag<Bag<Component>> componentsByType;
+	
+	private Bag<Component> entityComponents; // Added for debug support.
 
 	public EntityManager(World world) {
 		this.world = world;
@@ -21,6 +24,8 @@ public class EntityManager {
 		removedAndAvailable = new Bag<Entity>();
 		
 		componentsByType = new Bag<Bag<Component>>();
+		
+		entityComponents = new Bag<Component>();
 	}
 
 	protected Entity create() {
@@ -143,5 +148,18 @@ public class EntityManager {
 		return totalRemoved;
 	}
 
+	protected ImmutableBag<Component> getComponents(Entity e) {
+		entityComponents.clear();
+		for(int a = 0; componentsByType.size() > a; a++) {
+			Bag<Component> components = componentsByType.get(a);
+			if(components != null && e.getId() < components.size()) {
+				Component component = components.get(e.getId());
+				if(component != null) {
+					entityComponents.add(component);
+				}
+			}
+		}
+		return entityComponents;
+	}
 
 }

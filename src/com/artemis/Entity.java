@@ -1,5 +1,7 @@
 package com.artemis;
 
+import com.artemis.utils.ImmutableBag;
+
 /**
  * The entity class. Cannot be instantiated outside the framework, you must create new entities using World.
  * 
@@ -115,6 +117,7 @@ public final class Entity {
 	}
 
 	/**
+	 * This is the preferred method to use when retrieving a component from a entity. It will provide good performance.
 	 * 
 	 * @param type in order to retrieve the component fast you must provide a ComponentType instance for the expected component.
 	 * @return
@@ -132,6 +135,16 @@ public final class Entity {
 	 */
 	public <T extends Component> T getComponent(Class<T> type) {
 		return type.cast(getComponent(ComponentTypeManager.getTypeFor(type)));
+	}
+	
+	/**
+	 * Get all components belonging to this entity.
+	 * WARNING. Use only for debugging purposes, it is dead slow.
+	 * WARNING. The returned bag is only valid until this method is called again, then it is overwritten.
+	 * @return all components of this entity.
+	 */
+	public ImmutableBag<Component> getComponents() {
+		return entityManager.getComponents(this);
 	}
 	
 	/**
