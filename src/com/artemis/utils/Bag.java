@@ -192,9 +192,11 @@ public class Bag<E> implements ImmutableBag<E> {
 	public void set(int index, E o) {
 		if(index >= data.length) {
 			grow(index*2);
+			size = index+1;
+		} else if(index >= size) {
+			size = index+1;
 		}
 		data[index] = o;
-		size = index+1;
 	}
 
 	private void grow() {
