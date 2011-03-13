@@ -72,7 +72,7 @@ public class EntityManager {
 	protected void addComponent(Entity e, Component component) {
 		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
 		
-		if(type.getId() > componentsByType.getCapacity()) {
+		if(type.getId() >= componentsByType.getCapacity()) {
 			componentsByType.set(type.getId(), null);
 		}
 		
