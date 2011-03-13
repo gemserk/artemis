@@ -21,12 +21,6 @@ public abstract class EntityProcessingSystem extends EntitySystem {
 	 */
 	protected abstract void process(Entity e);
 
-	/**
-	 * Called before processing of entities begins. 
-	 */
-	protected void begin() {
-	};
-	
 	@Override
 	protected final void processEntities(ImmutableBag<Entity> entities) {
 		begin();
@@ -39,9 +33,4 @@ public abstract class EntityProcessingSystem extends EntitySystem {
 		end();
 	}
 	
-	/**
-	 * Called after the processing of entities ends.
-	 */
-	protected void end() {
-	};
 }

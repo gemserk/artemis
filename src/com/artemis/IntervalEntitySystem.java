@@ -19,10 +19,6 @@ public abstract class IntervalEntitySystem extends EntitySystem {
 	}
 
 	@Override
-	public void initialize() {
-	}
-
-	@Override
 	final protected void processEntities(ImmutableBag<Entity> entities) {
 		acc += world.getDelta();
 		

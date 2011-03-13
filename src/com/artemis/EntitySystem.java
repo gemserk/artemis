@@ -33,10 +33,24 @@ public abstract class EntitySystem {
 			typeFlags |= ct.getBit();
 		}
 	}
+	
+	/**
+	 * Called before processing of entities begins. 
+	 */
+	protected void begin() {
+	};
 
 	public final void process() {
+		begin();
 		processEntities(actives);
+		end();
 	}
+	
+	/**
+	 * Called after the processing of entities ends.
+	 */
+	protected void end() {
+	};
 	
 	/**
 	 * Any implementing entity system must implement this method and the logic
