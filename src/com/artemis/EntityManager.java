@@ -42,10 +42,21 @@ public class EntityManager {
 		
 		refresh(e);
 		
+		removeComponentsOfEntity(e);
+		
 		count--;
 		totalRemoved++;
 
 		removedAndAvailable.add(e);
+	}
+
+	private void removeComponentsOfEntity(Entity e) {
+		for(int a = 0; componentsByType.size() > a; a++) {
+			Bag<Component> components = componentsByType.get(a);
+			if(e.getId() < components.size()) {
+				components.set(e.getId(), null);
+			}
+		}
 	}
 	
 	/**
