@@ -86,6 +86,14 @@ public final class Entity {
 	}
 	
 	/**
+	 * Faster removal of components from a entity.
+	 * @param component to remove from this entity.
+	 */
+	public void removeComponent(ComponentType type){
+		entityManager.removeComponent(this, type);
+	}
+	
+	/**
 	 * Checks if the entity has been deleted from somewhere.
 	 * @return if it's active.
 	 */
