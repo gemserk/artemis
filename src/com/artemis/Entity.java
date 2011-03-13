@@ -8,6 +8,7 @@ package com.artemis;
  */
 public final class Entity {
 	private int id;
+	private long uniqueId;
 	private long typeBits;
 	private long systemBits;
 	private EntityManager entityManager;
@@ -25,6 +26,18 @@ public final class Entity {
 	 */
 	public int getId() {
 		return id;
+	}
+	
+	protected void setUniqueId(long uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+	
+	/**
+	 * Get the unique ID of this entity. Because entity instances are reused internally use this to identify between different instances.
+	 * @return the unique id of this entity.
+	 */
+	public long getUniqueId() {
+		return uniqueId;
 	}
 	
 	protected long getTypeBits() {

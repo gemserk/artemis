@@ -8,6 +8,7 @@ public class EntityManager {
 	private Bag<Entity> removedAndAvailable;
 	private int nextAvailableId;
 	private int count;
+	private long uniqueEntityId;
 	private long totalCreated;
 	private long totalRemoved;
 	
@@ -29,6 +30,7 @@ public class EntityManager {
 		} else {
 			e.reset();
 		}
+		e.setUniqueId(uniqueEntityId++);
 		activeEntities.set(e.getId(),e);
 		count++;
 		totalCreated++;
