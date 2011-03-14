@@ -115,7 +115,7 @@ public class EntityManager {
 	
 	protected Component getComponent(Entity e, ComponentType type) {
 		Bag<Component> bag = componentsByType.get(type.getId());
-		if(e.getId() < bag.getCapacity())
+		if(bag != null && e.getId() < bag.getCapacity())
 			return bag.get(e.getId());
 		return null;
 	}
