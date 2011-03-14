@@ -48,30 +48,59 @@ public class World {
 		return tagManager;
 	}
 	
+	/**
+	 * Time since last game loop.
+	 * @return delta in milliseconds.
+	 */
 	public int getDelta() {
 		return delta;
 	}
 	
+	/**
+	 * You must specify the delta for the game here.
+	 * 
+	 * @param delta time since last game loop.
+	 */
 	public void setDelta(int delta) {
 		this.delta = delta;
 	}
 
+	/**
+	 * Delete the provided entity from the world.
+	 * @param e entity
+	 */
 	public void deleteEntity(Entity e) {
 		deleted.add(e);
 	}
 	
+	/**
+	 * Ensure all systems are notified of changes to this entity.
+	 * @param e entity
+	 */
 	public void refreshEntity(Entity e) {
 		refreshed.add(e);
 	}
 	
+	/**
+	 * Create and return a new or reused entity instance.
+	 * @return entity
+	 */
 	public Entity createEntity() {
 		return entityManager.create();
 	}
 	
+	/**
+	 * Get a entity having the specified id.
+	 * @param entityId
+	 * @return entity
+	 */
 	public Entity getEntity(int entityId) {
 		return entityManager.getEntity(entityId);
 	}
 	
+	/**
+	 * Let framework take care of internal business.
+	 */
 	public void loopStart() {
 		if(!refreshed.isEmpty()) {
 			for(int i = 0; refreshed.size() > i; i++) {

@@ -158,5 +158,12 @@ public final class Entity {
 	public void refresh() {
 		world.refreshEntity(this);
 	}
+	
+	/**
+	 * Delete this entity from the world.
+	 */
+	public void delete() {
+		world.deleteEntity(this);
+	}
 
 }
