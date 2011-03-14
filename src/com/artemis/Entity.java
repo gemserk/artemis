@@ -166,4 +166,20 @@ public final class Entity {
 		world.deleteEntity(this);
 	}
 
+	/**
+	 * Set the group of the entity. Same as World.setGroup().
+	 * @param group of the entity.
+	 */
+	public void setGroup(String group) {
+		world.getGroupManager().set(group, this);
+	}
+	
+	/**
+	 * Assign a tag to this entity. Same as World.setTag().
+	 * @param tag of the entity.
+	 */
+	public void setTag(String tag) {
+		world.getTagManager().register(tag, this);
+	}
+	
 }
