@@ -21,27 +21,16 @@ public abstract class EntityProcessingSystem extends EntitySystem {
 	 */
 	protected abstract void process(Entity e);
 
-	/**
-	 * Called before processing of entities begins. 
-	 */
-	protected void begin() {
-	};
-	
 	@Override
 	protected final void processEntities(ImmutableBag<Entity> entities) {
-		begin();
 		for (int i = 0, s = entities.size(); s > i; i++) {
-			Entity e = entities.get(i);
-			if (e != null) {
-				process(e);
-			}
+			process(entities.get(i));
 		}
-		end();
 	}
 	
-	/**
-	 * Called after the processing of entities ends.
-	 */
-	protected void end() {
-	};
+	@Override
+	protected boolean checkProcessing() {
+		return true;
+	}
+	
 }

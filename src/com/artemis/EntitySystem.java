@@ -33,10 +33,26 @@ public abstract class EntitySystem {
 			typeFlags |= ct.getBit();
 		}
 	}
+	
+	/**
+	 * Called before processing of entities begins. 
+	 */
+	protected void begin() {
+	};
 
 	public final void process() {
-		processEntities(actives);
+		if(checkProcessing()) {
+			begin();
+			processEntities(actives);
+			end();
+		}
 	}
+	
+	/**
+	 * Called after the processing of entities ends.
+	 */
+	protected void end() {
+	};
 	
 	/**
 	 * Any implementing entity system must implement this method and the logic
@@ -45,6 +61,12 @@ public abstract class EntitySystem {
 	 * @param entities the entities this system contains.
 	 */
 	protected abstract void processEntities(ImmutableBag<Entity> entities);
+	
+	/**
+	 * 
+	 * @return true if the system should be processed, false if not.
+	 */
+	protected abstract boolean checkProcessing();
 
 	public abstract void initialize();
 

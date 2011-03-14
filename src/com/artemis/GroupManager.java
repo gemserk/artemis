@@ -10,6 +10,8 @@ import com.artemis.utils.ImmutableBag;
  * If you need to group your entities together, e.g. tanks going into "units" group or explosions into "effects",
  * then use this manager. You must retrieve it using world instance.
  * 
+ * A entity can only belong to one group at a time.
+ * 
  * @author Arni Arent
  *
  */
@@ -25,12 +27,14 @@ public class GroupManager {
 	}
 	
 	/**
-	 * Add the entity to the group.
+	 * Set the group of the entity.
 	 * 
-	 * @param group group add to.
-	 * @param e entity to put into the group.
+	 * @param group group to set the entity into.
+	 * @param e entity to set into the group.
 	 */
-	public void add(String group, Entity e) {
+	public void set(String group, Entity e) {
+		remove(e); // Entity can only belong to one group.
+		
 		Bag<Entity> entities = entitiesByGroup.get(group);
 		if(entities == null) {
 			entities = new Bag<Entity>();
@@ -77,6 +81,15 @@ public class GroupManager {
 			return groupByEntity.get(e.getId());
 		}
 		return null;
+	}
+	
+	/**
+	 * Checks if the entity belongs to any group.
+	 * @param e the entity to check.
+	 * @return true if it is in any group, false if none.
+	 */
+	public boolean isGrouped(Entity e) {
+		return getGroupOf(e) != null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.artemis.utils;
 
+import com.artemis.Entity;
+
 /**
  * Collection type a bit like ArrayList but does not preserve the order of its
  * entities, speedwise it is very good, especially suited for games.
@@ -192,9 +194,11 @@ public class Bag<E> implements ImmutableBag<E> {
 	public void set(int index, E o) {
 		if(index >= data.length) {
 			grow(index*2);
+			size = index+1;
+		} else if(index >= size) {
+			size = index+1;
 		}
 		data[index] = o;
-		size = index+1;
 	}
 
 	private void grow() {
@@ -219,6 +223,16 @@ public class Bag<E> implements ImmutableBag<E> {
 		}
 
 		size = 0;
+	}
+
+	/**
+	 * Add all items into this bag. 
+	 * @param added
+	 */
+	public void addAll(Bag<E> items) {
+		for(int i = 0; items.size() > i; i++) {
+			add(items.get(i));
+		}
 	}
 	
 }

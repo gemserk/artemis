@@ -1,5 +1,7 @@
 package com.artemis;
 
+import com.artemis.utils.ImmutableBag;
+
 /**
  * The entity class. Cannot be instantiated outside the framework, you must create new entities using World.
  * 
@@ -8,11 +10,15 @@ package com.artemis;
  */
 public final class Entity {
 	private int id;
+	private long uniqueId;
 	private long typeBits;
 	private long systemBits;
+	
+	private World world;
 	private EntityManager entityManager;
 	
 	protected Entity(World world, int id) {
+		this.world = world;
 		this.entityManager = world.getEntityManager();
 		this.id = id;
 	}
@@ -25,6 +31,18 @@ public final class Entity {
 	 */
 	public int getId() {
 		return id;
+	}
+	
+	protected void setUniqueId(long uniqueId) {
+		this.uniqueId = uniqueId;
+	}
+	
+	/**
+	 * Get the unique ID of this entity. Because entity instances are reused internally use this to identify between different instances.
+	 * @return the unique id of this entity.
+	 */
+	public long getUniqueId() {
+		return uniqueId;
 	}
 	
 	protected long getTypeBits() {
@@ -86,6 +104,14 @@ public final class Entity {
 	}
 	
 	/**
+	 * Faster removal of components from a entity.
+	 * @param component to remove from this entity.
+	 */
+	public void removeComponent(ComponentType type){
+		entityManager.removeComponent(this, type);
+	}
+	
+	/**
 	 * Checks if the entity has been deleted from somewhere.
 	 * @return if it's active.
 	 */
@@ -94,6 +120,7 @@ public final class Entity {
 	}
 
 	/**
+	 * This is the preferred method to use when retrieving a component from a entity. It will provide good performance.
 	 * 
 	 * @param type in order to retrieve the component fast you must provide a ComponentType instance for the expected component.
 	 * @return
@@ -114,12 +141,29 @@ public final class Entity {
 	}
 	
 	/**
+	 * Get all components belonging to this entity.
+	 * WARNING. Use only for debugging purposes, it is dead slow.
+	 * WARNING. The returned bag is only valid until this method is called again, then it is overwritten.
+	 * @return all components of this entity.
+	 */
+	public ImmutableBag<Component> getComponents() {
+		return entityManager.getComponents(this);
+	}
+	
+	/**
 	 * Refresh all changes to components for this entity. After adding or removing components, you must call
 	 * this method. It will update all relevant systems.
 	 * It is typical to call this after adding components to a newly created entity.
 	 */
 	public void refresh() {
-		entityManager.refresh(this);
+		world.refreshEntity(this);
+	}
+	
+	/**
+	 * Delete this entity from the world.
+	 */
+	public void delete() {
+		world.deleteEntity(this);
 	}
 
 }

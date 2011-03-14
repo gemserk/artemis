@@ -1,6 +1,7 @@
 package com.artemis;
 
 import com.artemis.utils.Bag;
+import com.artemis.utils.ImmutableBag;
 
 public class EntityManager {
 	private World world;
@@ -8,10 +9,13 @@ public class EntityManager {
 	private Bag<Entity> removedAndAvailable;
 	private int nextAvailableId;
 	private int count;
+	private long uniqueEntityId;
 	private long totalCreated;
 	private long totalRemoved;
 	
 	private Bag<Bag<Component>> componentsByType;
+	
+	private Bag<Component> entityComponents; // Added for debug support.
 
 	public EntityManager(World world) {
 		this.world = world;
@@ -20,6 +24,8 @@ public class EntityManager {
 		removedAndAvailable = new Bag<Entity>();
 		
 		componentsByType = new Bag<Bag<Component>>();
+		
+		entityComponents = new Bag<Component>();
 	}
 
 	protected Entity create() {
@@ -29,6 +35,7 @@ public class EntityManager {
 		} else {
 			e.reset();
 		}
+		e.setUniqueId(uniqueEntityId++);
 		activeEntities.set(e.getId(),e);
 		count++;
 		totalCreated++;
@@ -42,10 +49,21 @@ public class EntityManager {
 		
 		refresh(e);
 		
+		removeComponentsOfEntity(e);
+		
 		count--;
 		totalRemoved++;
 
 		removedAndAvailable.add(e);
+	}
+
+	private void removeComponentsOfEntity(Entity e) {
+		for(int a = 0; componentsByType.size() > a; a++) {
+			Bag<Component> components = componentsByType.get(a);
+			if(components != null && e.getId() < components.size()) {
+				components.set(e.getId(), null);
+			}
+		}
 	}
 	
 	/**
@@ -60,13 +78,17 @@ public class EntityManager {
 	
 	protected void addComponent(Entity e, Component component) {
 		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
-		if(type.getId() >= componentsByType.size()) {
-			for(int i = componentsByType.size(); type.getId() >= i; i++) {
-				componentsByType.add(new Bag<Component>());
-			}
+		
+		if(type.getId() >= componentsByType.getCapacity()) {
+			componentsByType.set(type.getId(), null);
 		}
 		
 		Bag<Component> components = componentsByType.get(type.getId());
+		if(components == null) {
+			components = new Bag<Component>();
+			componentsByType.set(type.getId(), components);
+		}
+		
 		components.set(e.getId(), component);
 
 		e.addTypeBit(type.getBit());
@@ -82,6 +104,10 @@ public class EntityManager {
 	
 	protected void removeComponent(Entity e, Component component) {
 		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
+		removeComponent(e, type);
+	}
+	
+	protected void removeComponent(Entity e, ComponentType type) {
 		Bag<Component> components = componentsByType.get(type.getId());
 		components.set(e.getId(), null);
 		e.removeTypeBit(type.getBit());
@@ -120,6 +146,20 @@ public class EntityManager {
 	 */
 	public long getTotalRemoved() {
 		return totalRemoved;
+	}
+
+	protected ImmutableBag<Component> getComponents(Entity e) {
+		entityComponents.clear();
+		for(int a = 0; componentsByType.size() > a; a++) {
+			Bag<Component> components = componentsByType.get(a);
+			if(components != null && e.getId() < components.size()) {
+				Component component = components.get(e.getId());
+				if(component != null) {
+					entityComponents.add(component);
+				}
+			}
+		}
+		return entityComponents;
 	}
 
 }
