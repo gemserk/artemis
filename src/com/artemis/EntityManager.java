@@ -60,7 +60,7 @@ public class EntityManager {
 	private void removeComponentsOfEntity(Entity e) {
 		for(int a = 0; componentsByType.size() > a; a++) {
 			Bag<Component> components = componentsByType.get(a);
-			if(e.getId() < components.size()) {
+			if(components != null && e.getId() < components.size()) {
 				components.set(e.getId(), null);
 			}
 		}

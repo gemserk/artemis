@@ -1,6 +1,5 @@
 package com.artemis;
 
-import com.artemis.utils.ImmutableBag;
 
 /**
  * A system that processes entities at a interval in milliseconds.
@@ -19,19 +18,13 @@ public abstract class IntervalEntitySystem extends EntitySystem {
 	}
 
 	@Override
-	final protected void processEntities(ImmutableBag<Entity> entities) {
+	protected boolean checkProcessing() {
 		acc += world.getDelta();
-		
 		if(acc >= interval) {
 			acc -= interval;
-			intervalProcessAll(entities);
+			return true;
 		}
+		return false;
 	}
-
-	/**
-	 * The entities to process.
-	 * @param entities read-only bag of entities.
-	 */
-	protected abstract void intervalProcessAll(ImmutableBag<Entity> entities);
 
 }

@@ -41,9 +41,11 @@ public abstract class EntitySystem {
 	};
 
 	public final void process() {
-		begin();
-		processEntities(actives);
-		end();
+		if(checkProcessing()) {
+			begin();
+			processEntities(actives);
+			end();
+		}
 	}
 	
 	/**
@@ -59,6 +61,12 @@ public abstract class EntitySystem {
 	 * @param entities the entities this system contains.
 	 */
 	protected abstract void processEntities(ImmutableBag<Entity> entities);
+	
+	/**
+	 * 
+	 * @return true if the system should be processed, false if not.
+	 */
+	protected abstract boolean checkProcessing();
 
 	public abstract void initialize();
 

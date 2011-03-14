@@ -37,22 +37,31 @@ public abstract class DelayedEntitySystem extends EntitySystem {
 	}
 
 	@Override
-	protected void processEntities(ImmutableBag<Entity> entities) {
+	protected final void processEntities(ImmutableBag<Entity> entities) {
+		processEntities(entities, acc);
+		stop();
+	}
+	
+	@Override
+	protected final boolean checkProcessing() {
 		if(running) {
 			acc += world.getDelta();
 			
 			if(acc >= delay) {
-				stop();
-				delayedProcessAll(entities);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	/**
-	 * The entities to process.
+	 * The entities to process with accumulated delta.
 	 * @param entities read-only bag of entities.
 	 */
-	protected abstract void delayedProcessAll(ImmutableBag<Entity> entities);
+	protected abstract void processEntities(ImmutableBag<Entity> entities, int accumulatedDelta);
+	
+	
+	
 	
 	/**
 	 * Start processing of entities after a certain amount of milliseconds.
@@ -66,7 +75,7 @@ public abstract class DelayedEntitySystem extends EntitySystem {
 		this.acc = 0;
 		running = true;
 	}
-	
+
 	/**
 	 * Get the initial delay that the system was ordered to process entities after.
 	 * 

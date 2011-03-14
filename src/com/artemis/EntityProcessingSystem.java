@@ -23,14 +23,16 @@ public abstract class EntityProcessingSystem extends EntitySystem {
 
 	@Override
 	protected final void processEntities(ImmutableBag<Entity> entities) {
-		begin();
 		for (int i = 0, s = entities.size(); s > i; i++) {
-			Entity e = entities.get(i);
-			if (e != null) {
-				process(e);
-			}
+			Entity entity = entities.get(i);
+			if(entity != null)
+				process(entity);
 		}
-		end();
+	}
+	
+	@Override
+	protected boolean checkProcessing() {
+		return true;
 	}
 	
 }
