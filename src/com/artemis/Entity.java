@@ -13,9 +13,12 @@ public final class Entity {
 	private long uniqueId;
 	private long typeBits;
 	private long systemBits;
+	
+	private World world;
 	private EntityManager entityManager;
 	
 	protected Entity(World world, int id) {
+		this.world = world;
 		this.entityManager = world.getEntityManager();
 		this.id = id;
 	}
@@ -153,7 +156,7 @@ public final class Entity {
 	 * It is typical to call this after adding components to a newly created entity.
 	 */
 	public void refresh() {
-		entityManager.refresh(this);
+		world.refreshEntity(this);
 	}
 
 }

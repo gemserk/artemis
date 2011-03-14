@@ -1,5 +1,7 @@
 package com.artemis;
 
+import com.artemis.utils.Bag;
+
 /**
  * The primary instance for the framework. It contains all the managers.
  * 
@@ -17,12 +19,17 @@ public class World {
 	private GroupManager groupManager;
 	
 	private int delta;
+	private Bag<Entity> refreshed;
+	private Bag<Entity> deleted;
 
 	public World() {
 		entityManager = new EntityManager(this);
 		systemManager = new SystemManager(this);
 		tagManager = new TagManager(this);
 		groupManager = new GroupManager(this);
+		
+		refreshed = new Bag<Entity>();
+		deleted = new Bag<Entity>();
 	}
 	
 	public GroupManager getGroupManager() {
@@ -50,8 +57,11 @@ public class World {
 	}
 
 	public void deleteEntity(Entity e) {
-		groupManager.remove(e);
-		entityManager.remove(e);
+		deleted.add(e);
+	}
+	
+	public void refreshEntity(Entity e) {
+		refreshed.add(e);
 	}
 	
 	public Entity createEntity() {
@@ -60,6 +70,24 @@ public class World {
 	
 	public Entity getEntity(int entityId) {
 		return entityManager.getEntity(entityId);
+	}
+	
+	public void loopStart() {
+		if(!refreshed.isEmpty()) {
+			for(int i = 0; refreshed.size() > i; i++) {
+				entityManager.refresh(refreshed.get(i));
+			}
+			refreshed.clear();
+		}
+		
+		if(!deleted.isEmpty()) {
+			for(int i = 0; deleted.size() > i; i++) {
+				Entity e = deleted.get(i);
+				groupManager.remove(e);
+				entityManager.remove(e);
+			}
+			deleted.clear();
+		}
 	}
 
 }
