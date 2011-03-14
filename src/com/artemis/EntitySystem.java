@@ -104,5 +104,21 @@ public abstract class EntitySystem {
 	protected final void setWorld(World world) {
 		this.world = world;
 	}
+	
+	/**
+	 * Merge together a required type and a array of other types. Used in derived systems.
+	 * @param requiredType
+	 * @param otherTypes
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	protected static Class<? extends Component>[] getMergedTypes(Class<? extends Component> requiredType, Class<? extends Component>[] otherTypes) {
+		Class<? extends Component>[] types = new Class[1+otherTypes.length];
+		types[0] = requiredType;
+		for(int i = 0; otherTypes.length > i; i++) {
+			types[i+1] = otherTypes[i];
+		}
+		return types;
+	}
 
 }
