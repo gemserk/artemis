@@ -12,10 +12,15 @@ import com.artemis.utils.ImmutableBag;
  */
 public abstract class IntervalEntityProcessingSystem extends IntervalEntitySystem {
 
-	public IntervalEntityProcessingSystem(int interval, Class<? extends Component>... types) {
-		super(interval, types);
+	/**
+	 * Create a new IntervalEntityProcessingSystem. It requires at least one component.
+	 * @param requiredType the required component type.
+	 * @param otherTypes other component types.
+	 */
+	public IntervalEntityProcessingSystem(int interval, Class<? extends Component> requiredType, Class<? extends Component>... otherTypes) {
+		super(interval, getMergedTypes(requiredType, otherTypes));
 	}
-
+	
 	/**
 	 * Process a entity this system is interested in.
 	 * @param e the entity to process.

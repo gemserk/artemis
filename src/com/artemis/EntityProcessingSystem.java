@@ -10,9 +10,14 @@ import com.artemis.utils.ImmutableBag;
  *
  */
 public abstract class EntityProcessingSystem extends EntitySystem {
-
-	public EntityProcessingSystem(Class<? extends Component>... types) {
-		super(types);
+	
+	/**
+	 * Create a new EntityProcessingSystem. It requires at least one component.
+	 * @param requiredType the required component type.
+	 * @param otherTypes other component types.
+	 */
+	public EntityProcessingSystem(Class<? extends Component> requiredType, Class<? extends Component>... otherTypes) {
+		super(getMergedTypes(requiredType, otherTypes));
 	}
 	
 	/**
