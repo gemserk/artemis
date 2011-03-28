@@ -70,7 +70,9 @@ public class World {
 	 * @param e entity
 	 */
 	public void deleteEntity(Entity e) {
-		deleted.add(e);
+		if(!deleted.contains(e)) {
+			deleted.add(e);
+		}
 	}
 	
 	/**
