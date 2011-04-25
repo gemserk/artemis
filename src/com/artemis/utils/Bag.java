@@ -8,7 +8,6 @@ import com.artemis.Entity;
  */
 
 public class Bag<E> implements ImmutableBag<E> {
-
 	private Object[] data;
 	private int size = 0;
 
