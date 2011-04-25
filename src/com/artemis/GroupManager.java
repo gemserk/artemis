@@ -17,6 +17,7 @@ import com.artemis.utils.ImmutableBag;
  */
 public class GroupManager {
 	private World world;
+	private Bag<Entity> EMPTY_BAG;
 	private Map<String, Bag<Entity>> entitiesByGroup;
 	private Bag<String> groupByEntity;
 
@@ -24,6 +25,7 @@ public class GroupManager {
 		this.world = world;
 		entitiesByGroup = new HashMap<String, Bag<Entity>>();
 		groupByEntity = new Bag<String>();
+		EMPTY_BAG = new Bag<Entity>();
 	}
 	
 	/**
@@ -51,7 +53,10 @@ public class GroupManager {
 	 * @return read-only bag of entities belonging to the group.
 	 */
 	public ImmutableBag<Entity> getEntities(String group) {
-		return entitiesByGroup.get(group);
+		Bag<Entity> bag = entitiesByGroup.get(group);
+		if(bag == null)
+			return EMPTY_BAG;
+		return bag;
 	}
 	
 	/**
