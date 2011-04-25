@@ -71,7 +71,7 @@ public abstract class EntitySystem {
 	/**
 	 * Override to implement code that gets executed when systems are initialized.
 	 */
-	public void initialize() {};
+	protected void initialize() {};
 
 	/**
 	 * Called if the system has received a entity it is interested in, e.g. created or a component was added to it.
