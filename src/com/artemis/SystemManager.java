@@ -42,9 +42,9 @@ public class SystemManager {
 	 * After adding all systems to the world, you must initialize them all.
 	 */
 	public void initializeAll() {
-		for(EntitySystem es : systems.values()) {
-			es.initialize();
-		}
-	}
+	   for (int i = 0; i < bagged.size(); i++) {
+	      bagged.get(i).initialize();
+	   }
+	} 
 
 }
