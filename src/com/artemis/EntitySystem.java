@@ -12,9 +12,7 @@ import com.artemis.utils.ImmutableBag;
  *
  */
 public abstract class EntitySystem {
-	private static int SYSID = 0;
-
-	private long systemBit = (long) Math.pow(2, SYSID++);
+	private long systemBit;
 
 	private long typeFlags;
 
@@ -26,6 +24,7 @@ public abstract class EntitySystem {
 	}
 
 	public EntitySystem(Class<? extends Component>... types) {
+		systemBit = SystemBitManager.getBitFor(this.getClass());
 		actives = new Bag<Entity>();
 
 		for (Class<? extends Component> type : types) {
