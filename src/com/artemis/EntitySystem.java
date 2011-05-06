@@ -24,13 +24,16 @@ public abstract class EntitySystem {
 	}
 
 	public EntitySystem(Class<? extends Component>... types) {
-		systemBit = SystemBitManager.getBitFor(this.getClass());
 		actives = new Bag<Entity>();
 
 		for (Class<? extends Component> type : types) {
 			ComponentType ct = ComponentTypeManager.getTypeFor(type);
 			typeFlags |= ct.getBit();
 		}
+	}
+	
+	protected void setSystemBit(long bit) {
+		this.systemBit = bit;
 	}
 	
 	/**
