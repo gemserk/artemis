@@ -12,9 +12,7 @@ import com.artemis.utils.ImmutableBag;
  *
  */
 public abstract class EntitySystem {
-	private static int SYSID = 0;
-
-	private long systemBit = (long) Math.pow(2, SYSID++);
+	private long systemBit;
 
 	private long typeFlags;
 
@@ -32,6 +30,10 @@ public abstract class EntitySystem {
 			ComponentType ct = ComponentTypeManager.getTypeFor(type);
 			typeFlags |= ct.getBit();
 		}
+	}
+	
+	protected void setSystemBit(long bit) {
+		this.systemBit = bit;
 	}
 	
 	/**

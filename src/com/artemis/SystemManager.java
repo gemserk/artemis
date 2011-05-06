@@ -25,8 +25,14 @@ public class SystemManager {
 	
 	public EntitySystem setSystem(EntitySystem system) {
 		system.setWorld(world);
+		
 		systems.put(system.getClass(), system);
-		bagged.add(system);
+		
+		if(!bagged.contains(system))
+			bagged.add(system);
+		
+		system.setSystemBit(SystemBitManager.getBitFor(system.getClass()));
+		
 		return system;
 	}
 	
