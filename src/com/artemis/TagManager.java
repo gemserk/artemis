@@ -34,5 +34,9 @@ public class TagManager {
 	public Entity getEntity(String tag) {
 		return entityByTag.get(tag);
 	}
+	
+	protected void remove(Entity e) {
+		entityByTag.values().remove(e);
+	}
 
 }

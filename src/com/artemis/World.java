@@ -116,6 +116,7 @@ public class World {
 				Entity e = deleted.get(i);
 				groupManager.remove(e);
 				entityManager.remove(e);
+				tagManager.remove(e);
 			}
 			deleted.clear();
 		}
