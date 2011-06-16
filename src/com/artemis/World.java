@@ -1,5 +1,8 @@
 package com.artemis;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.artemis.utils.Bag;
 
 /**
@@ -21,6 +24,8 @@ public class World {
 	private int delta;
 	private Bag<Entity> refreshed;
 	private Bag<Entity> deleted;
+	
+	private Map<Class<? extends Manager>, Manager> managers;
 
 	public World() {
 		entityManager = new EntityManager(this);
@@ -30,6 +35,8 @@ public class World {
 		
 		refreshed = new Bag<Entity>();
 		deleted = new Bag<Entity>();
+		
+		managers = new HashMap<Class<? extends Manager>, Manager>();
 	}
 	
 	public GroupManager getGroupManager() {
@@ -46,6 +53,25 @@ public class World {
 	
 	public TagManager getTagManager() {
 		return tagManager;
+	}
+	
+	/**
+	 * Allows for setting a custom manager.
+	 * @param manager to be added
+	 */
+	public void setManager(Manager manager) {
+		managers.put(manager.getClass(), manager);
+	}
+	
+	/**
+	 * Returns a manager of the specified type.
+	 * 
+	 * @param <T>
+	 * @param managerType class type of the manager
+	 * @return the manager
+	 */
+	public <T extends Manager> T getManager(Class<T> managerType) {
+		return managerType.cast(managers.get(managerType));
 	}
 	
 	/**
