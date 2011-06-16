@@ -13,8 +13,8 @@ public class ComponentMapper<T extends Component> {
 	private EntityManager em;
 	private Class<T> classType;
 
-	public ComponentMapper(Class<T> type, EntityManager em) {
-		this.em = em;
+	public ComponentMapper(Class<T> type, World world) {
+		this.em = world.getEntityManager();
 		this.type = ComponentTypeManager.getTypeFor(type);
 		this.classType = type;
 	}
