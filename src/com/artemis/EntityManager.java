@@ -114,7 +114,13 @@ public class EntityManager {
 	}
 	
 	protected Component getComponent(Entity e, ComponentType type) {
-		Bag<Component> bag = componentsByType.get(type.getId());
+		int componentTypeId = type.getId();
+
+		// if asking for a component type never added before, then return null directly
+		if (componentTypeId >= componentsByType.getCapacity())
+			return null;
+		
+		Bag<Component> bag = componentsByType.get(componentTypeId);
 		if(bag != null && e.getId() < bag.getCapacity())
 			return bag.get(e.getId());
 		return null;
