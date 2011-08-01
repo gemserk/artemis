@@ -4,7 +4,7 @@
 	<groupId>com.gamadu.artemis</groupId>
 	<artifactId>artemis</artifactId>
 	<name>Artemis Components Engine</name>
-	<version>0.0.1-GEMSERK-SNAPSHOT</version>
+	<version>0.0.1-GEMSERK-ARIELSAN-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<organization>
 		<name>Gamadu</name>
