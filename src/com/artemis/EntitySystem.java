@@ -19,17 +19,15 @@ public abstract class EntitySystem {
 	protected World world;
 
 	private Bag<Entity> actives;
+
+	private Class<? extends Component>[] types;
 	
 	public EntitySystem() {
 	}
 
 	public EntitySystem(Class<? extends Component>... types) {
 		actives = new Bag<Entity>();
-
-		for (Class<? extends Component> type : types) {
-			ComponentType ct = ComponentTypeManager.getTypeFor(type);
-			typeFlags |= ct.getBit();
-		}
+		this.types = types;
 	}
 	
 	protected void setSystemBit(long bit) {
@@ -70,6 +68,16 @@ public abstract class EntitySystem {
 	 */
 	protected abstract boolean checkProcessing();
 
+	/**
+	 * Ensure the entity system has it's type flags set (the components it's interested in).
+	 */
+	protected final void applyTypeFlags() {
+		for (Class<? extends Component> type : types) {
+			ComponentType ct = ComponentTypeManager.getTypeFor(type, world);
+			typeFlags |= ct.getBit();
+		}		
+	}
+	
 	/**
 	 * Override to implement code that gets executed when systems are initialized.
 	 */

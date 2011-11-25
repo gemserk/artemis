@@ -137,7 +137,7 @@ public final class Entity {
 	 * @return component that matches, or null if none is found.
 	 */
 	public <T extends Component> T getComponent(Class<T> type) {
-		return type.cast(getComponent(ComponentTypeManager.getTypeFor(type)));
+		return type.cast(getComponent(ComponentTypeManager.getTypeFor(type, world)));
 	}
 	
 	/**
