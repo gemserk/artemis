@@ -96,5 +96,15 @@ public class GroupManager {
 	public boolean isGrouped(Entity e) {
 		return getGroupOf(e) != null;
 	}
+	
+	/**
+	 * Check if the entity is in the supplied group.
+	 * @param group the group to check in.
+	 * @param e the entity to check for.
+	 * @return true if the entity is in the supplied group, false if not.
+	 */
+	public boolean isInGroup(String group, Entity e) {
+		return group != null && group.equalsIgnoreCase(getGroupOf(e));
+	}
 
 }
