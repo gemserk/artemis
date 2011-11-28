@@ -49,7 +49,6 @@ public class SystemManager {
 	 */
 	public void initializeAll() {
 	   for (int i = 0; i < bagged.size(); i++) {
-		  bagged.get(i).applyTypeFlags();
 	      bagged.get(i).initialize();
 	   }
 	} 

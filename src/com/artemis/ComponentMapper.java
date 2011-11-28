@@ -15,7 +15,7 @@ public class ComponentMapper<T extends Component> {
 
 	public ComponentMapper(Class<T> type, World world) {
 		this.em = world.getEntityManager();
-		this.type = ComponentTypeManager.getTypeFor(type, world);
+		this.type = ComponentTypeManager.getTypeFor(type);
 		this.classType = type;
 	}
 

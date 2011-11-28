@@ -23,7 +23,7 @@ public class EntityManager {
 		activeEntities = new Bag<Entity>();
 		removedAndAvailable = new Bag<Entity>();
 		
-		componentsByType = new Bag<Bag<Component>>();
+		componentsByType = new Bag<Bag<Component>>(64);
 		
 		entityComponents = new Bag<Component>();
 	}
@@ -77,7 +77,7 @@ public class EntityManager {
 	}
 	
 	protected void addComponent(Entity e, Component component) {
-		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass(), world);
+		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
 		
 		if(type.getId() >= componentsByType.getCapacity()) {
 			componentsByType.set(type.getId(), null);
@@ -103,7 +103,7 @@ public class EntityManager {
 	}
 	
 	protected void removeComponent(Entity e, Component component) {
-		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass(), world);
+		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
 		removeComponent(e, type);
 	}
 	
@@ -111,12 +111,6 @@ public class EntityManager {
 		Bag<Component> components = componentsByType.get(type.getId());
 		components.set(e.getId(), null);
 		e.removeTypeBit(type.getBit());
-	}
-	
-	protected void componentTypeAdded(ComponentType type) {
-		int componentTypeId = type.getId();
-		if (componentTypeId >= componentsByType.getCapacity())
-			componentsByType.set(componentTypeId, null);
 	}
 	
 	protected Component getComponent(Entity e, ComponentType type) {
