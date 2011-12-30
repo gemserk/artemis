@@ -80,7 +80,8 @@ public class World {
 	 * @param e entity
 	 */
 	public void refreshEntity(Entity e) {
-		refreshed.add(e);
+		if (!refreshed.contains(e))
+			refreshed.add(e);
 	}
 	
 	/**
