@@ -107,7 +107,8 @@ public abstract class EntitySystem {
 			actives.add(e);
 			e.addSystemBit(systemBit);
 			added(e);
-			enabled(e);
+			if (e.isEnabled())
+				enabled(e);
 		} else if (!interest && contains && typeFlags > 0) {
 			disabled(e);
 			remove(e);

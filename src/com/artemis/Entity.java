@@ -17,10 +17,29 @@ public final class Entity {
 	private World world;
 	private EntityManager entityManager;
 	
+	private boolean enabled;
+	
+	public boolean isEnabled() {
+		return enabled;
+	}
+	
+	public void enable() {
+		setEnabled(true);
+	}
+	
+	public void disable() {
+		setEnabled(false);
+	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
 	protected Entity(World world, int id) {
 		this.world = world;
 		this.entityManager = world.getEntityManager();
 		this.id = id;
+		this.enabled = true;
 	}
 
 	/**

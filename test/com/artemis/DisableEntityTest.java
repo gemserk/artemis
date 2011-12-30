@@ -174,4 +174,24 @@ public class DisableEntityTest {
 		assertFalse(mockSystemA.enabledEntities.contains(entity));
 		assertTrue(mockSystemA.disabledEntities.contains(entity));
 	}
+	
+	@Test
+	public void shouldNotCallEnableOnAddedIfEntityDisabled() {
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+		entity.disable();
+
+		world.loopStart();
+		
+		assertFalse(mockSystemA.enabledEntities.contains(entity));
+		assertFalse(mockSystemA.disabledEntities.contains(entity));
+	}
 }
