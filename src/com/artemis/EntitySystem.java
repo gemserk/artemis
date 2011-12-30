@@ -80,6 +80,18 @@ public abstract class EntitySystem {
 	 * @param e the entity that was added to this system.
 	 */
 	protected void added(Entity e) {};
+	
+	/**
+	 * Called if the entity was enabled.
+	 * @param e the entity that was enabled.
+	 */
+	protected void enabled(Entity e) {};
+	
+	/**
+	 * Called if the entity was disabled.
+	 * @param e the entity that was disabled.
+	 */
+	protected void disabled(Entity e) {};
 
 	/**
 	 * Called if a entity was removed from this system, e.g. deleted or had one of it's components removed.
@@ -95,8 +107,10 @@ public abstract class EntitySystem {
 			actives.add(e);
 			e.addSystemBit(systemBit);
 			added(e);
+			enabled(e);
 		} else if (!interest && contains && typeFlags > 0) {
 			remove(e);
+//			disabled(e);
 		}
 	}
 
