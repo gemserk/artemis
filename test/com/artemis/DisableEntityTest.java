@@ -48,24 +48,28 @@ public class DisableEntityTest {
 		protected void added(Entity e) {
 			super.added(e);
 			addedEntities.add(e);
+			System.out.println("added");
 		}
 
 		@Override
 		protected void removed(Entity e) {
 			super.removed(e);
 			removedEntities.add(e);
+			System.out.println("removed");
 		}
 
 		@Override
 		protected void disabled(Entity e) {
 			super.disabled(e);
 			disabledEntities.add(e);
+			System.out.println("disabled");
 		}
 
 		@Override
 		protected void enabled(Entity e) {
 			super.enabled(e);
 			enabledEntities.add(e);
+			System.out.println("enabled");
 		}
 
 		@Override
@@ -188,10 +192,66 @@ public class DisableEntityTest {
 		entity.addComponent(new ComponentA());
 		entity.refresh();
 		entity.disable();
+		
+		mockSystemA.reset();
 
 		world.loopStart();
 		
 		assertFalse(mockSystemA.enabledEntities.contains(entity));
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
+	}
+	
+	@Test
+	public void shouldNotCallDisableOnRemovedIfEntityAlreadyDisabled() {
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+		entity.disable();
+
+		world.loopStart();
+		
+		entity.delete();
+		
+		mockSystemA.reset();
+
+		world.loopStart();
+		
+		assertFalse(mockSystemA.enabledEntities.contains(entity));
+		assertFalse(mockSystemA.disabledEntities.contains(entity));
+	}
+	
+	@Test
+	public void shouldCallEntityEnabledIfItWasDisabledAndThenEnabled() {
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+		entity.disable();
+
+		world.loopStart();
+		
+		entity.enable();
+		
+		mockSystemA.reset();
+
+		world.loopStart();
+		
+		assertTrue(mockSystemA.enabledEntities.contains(entity));
+		assertFalse(mockSystemA.disabledEntities.contains(entity));
+		assertFalse(mockSystemA.addedEntities.contains(entity));
+		assertFalse(mockSystemA.removedEntities.contains(entity));
 	}
 }

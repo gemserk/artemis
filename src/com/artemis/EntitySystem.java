@@ -103,21 +103,33 @@ public abstract class EntitySystem {
 		boolean contains = (systemBit & e.getSystemBits()) == systemBit;
 		boolean interest = (typeFlags & e.getTypeBits()) == typeFlags;
 
-		if (interest && !contains && typeFlags > 0) {
-			actives.add(e);
-			e.addSystemBit(systemBit);
-			added(e);
-			if (e.isEnabled())
-				enabled(e);
-		} else if (!interest && contains && typeFlags > 0) {
-			disabled(e);
+		if (interest && !contains && typeFlags > 0)
+			add(e);
+		else if (!interest && contains && typeFlags > 0)
 			remove(e);
-		}
+		else if (interest && contains && e.isEnabled() && typeFlags > 0)
+			enabled(e);
+		else if (interest && contains && !e.isEnabled() && typeFlags > 0)
+			disabled(e);
+
+	}
+	
+	private void add(Entity e) {
+		actives.add(e);
+		e.addSystemBit(systemBit);
+		added(e);
+
+		if (e.isEnabled())
+			enabled(e);
 	}
 
 	private void remove(Entity e) {
 		actives.remove(e);
 		e.removeSystemBit(systemBit);
+
+		if (e.isEnabled())
+			disabled(e);
+
 		removed(e);
 	}
 

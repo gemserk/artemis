@@ -109,7 +109,7 @@ public class World {
 				entityManager.refresh(refreshed.get(i));
 			}
 			refreshed.clear();
-		}
+		} 
 		
 		if(!deleted.isEmpty()) {
 			for(int i = 0; deleted.size() > i; i++) {
