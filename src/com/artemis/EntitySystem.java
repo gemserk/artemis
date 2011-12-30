@@ -99,7 +99,7 @@ public abstract class EntitySystem {
 	 */
 	protected void removed(Entity e) {};
 
-	protected final void change(Entity e) {
+	protected void change(Entity e) {
 		boolean contains = (systemBit & e.getSystemBits()) == systemBit;
 		boolean interest = (typeFlags & e.getTypeBits()) == typeFlags;
 
