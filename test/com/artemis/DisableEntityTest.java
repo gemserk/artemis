@@ -1,7 +1,6 @@
 package com.artemis;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -249,5 +248,15 @@ public class DisableEntityTest {
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
 		assertFalse(mockSystemA.addedEntities.contains(entity));
 		assertFalse(mockSystemA.removedEntities.contains(entity));
+	}
+	
+	@Test
+	public void shouldNotProcessEntityIfDisabled() { 
+		fail("not implemented yet");
+	}
+	
+	@Test
+	public void shouldProcessEntityIfEnabled() { 
+		fail("not implemented yet");
 	}
 }
