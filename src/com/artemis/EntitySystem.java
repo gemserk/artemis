@@ -109,8 +109,8 @@ public abstract class EntitySystem {
 			added(e);
 			enabled(e);
 		} else if (!interest && contains && typeFlags > 0) {
+			disabled(e);
 			remove(e);
-//			disabled(e);
 		}
 	}
 
