@@ -80,8 +80,7 @@ public class World {
 	 * @param e entity
 	 */
 	public void refreshEntity(Entity e) {
-		if (!refreshed.contains(e))
-			refreshed.add(e);
+		refreshed.add(e);
 	}
 	
 	/**
@@ -107,7 +106,9 @@ public class World {
 	public void loopStart() {
 		if(!refreshed.isEmpty()) {
 			for(int i = 0; refreshed.size() > i; i++) {
-				entityManager.refresh(refreshed.get(i));
+				Entity e = refreshed.get(i);
+				entityManager.refresh(e);
+				e.refreshPending = false;
 			}
 			refreshed.clear();
 		} 

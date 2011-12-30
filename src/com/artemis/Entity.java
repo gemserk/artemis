@@ -18,6 +18,8 @@ public final class Entity {
 	private EntityManager entityManager;
 
 	private boolean enabled;
+	
+	boolean refreshPending;
 
 	public boolean isEnabled() {
 		return enabled;
@@ -40,6 +42,7 @@ public final class Entity {
 		this.entityManager = world.getEntityManager();
 		this.id = id;
 		this.enabled = true;
+		refresh();
 	}
 
 	/**
@@ -182,7 +185,10 @@ public final class Entity {
 	 * Refresh all changes to components for this entity. After adding or removing components, you must call this method. It will update all relevant systems. It is typical to call this after adding components to a newly created entity.
 	 */
 	public void refresh() {
+		if (refreshPending)
+			return;
 		world.refreshEntity(this);
+		refreshPending = true;
 	}
 
 	/**

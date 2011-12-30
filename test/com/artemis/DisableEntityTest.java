@@ -48,28 +48,24 @@ public class DisableEntityTest {
 		protected void added(Entity e) {
 			super.added(e);
 			addedEntities.add(e);
-			System.out.println("added");
 		}
 
 		@Override
 		protected void removed(Entity e) {
 			super.removed(e);
 			removedEntities.add(e);
-			System.out.println("removed");
 		}
 
 		@Override
 		protected void disabled(Entity e) {
 			super.disabled(e);
 			disabledEntities.add(e);
-			System.out.println("disabled");
 		}
 
 		@Override
 		protected void enabled(Entity e) {
 			super.enabled(e);
 			enabledEntities.add(e);
-			System.out.println("enabled");
 		}
 
 		@Override
