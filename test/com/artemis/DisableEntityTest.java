@@ -1,16 +1,23 @@
 package com.artemis;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import com.artemis.utils.Bag;
 
+//@RunWith(JMock.class)
 public class DisableEntityTest {
+
+	// Mockery mockery = new Mockery() {
+	// {
+	// setImposteriser(ClassImposteriser.INSTANCE);
+	// }
+	// };
 
 	static class ComponentA extends Component {
 
@@ -27,7 +34,7 @@ public class DisableEntityTest {
 		public Set<Entity> enabledEntities = new HashSet<Entity>();
 		public Set<Entity> disabledEntities = new HashSet<Entity>();
 		public Set<Entity> processedEntities = new HashSet<Entity>();
-		
+
 		public MockEntityProcessingSystem(Class<? extends Component> requiredType) {
 			super(requiredType);
 		}
@@ -122,7 +129,7 @@ public class DisableEntityTest {
 		// updateSystems(world);
 
 		entity.delete();
-		
+
 		mockSystemA.reset();
 		// entity.refresh();
 
@@ -151,7 +158,7 @@ public class DisableEntityTest {
 		assertTrue(mockSystemA.enabledEntities.contains(entity));
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
 	}
-	
+
 	@Test
 	public void shouldCallEntityDisabledWhenRemoved() {
 		World world = new World();
@@ -166,9 +173,9 @@ public class DisableEntityTest {
 		entity.refresh();
 
 		world.loopStart();
-		
+
 		entity.delete();
-		
+
 		mockSystemA.reset();
 
 		world.loopStart();
@@ -176,7 +183,7 @@ public class DisableEntityTest {
 		assertFalse(mockSystemA.enabledEntities.contains(entity));
 		assertTrue(mockSystemA.disabledEntities.contains(entity));
 	}
-	
+
 	@Test
 	public void shouldNotCallEnableOnAddedIfEntityDisabled() {
 		World world = new World();
@@ -190,15 +197,15 @@ public class DisableEntityTest {
 		entity.addComponent(new ComponentA());
 		entity.refresh();
 		entity.disable();
-		
+
 		mockSystemA.reset();
 
 		world.loopStart();
-		
+
 		assertFalse(mockSystemA.enabledEntities.contains(entity));
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
 	}
-	
+
 	@Test
 	public void shouldNotCallDisableOnRemovedIfEntityAlreadyDisabled() {
 		World world = new World();
@@ -214,17 +221,17 @@ public class DisableEntityTest {
 		entity.disable();
 
 		world.loopStart();
-		
+
 		entity.delete();
-		
+
 		mockSystemA.reset();
 
 		world.loopStart();
-		
+
 		assertFalse(mockSystemA.enabledEntities.contains(entity));
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
 	}
-	
+
 	@Test
 	public void shouldCallEntityEnabledIfItWasDisabledAndThenEnabled() {
 		World world = new World();
@@ -240,19 +247,19 @@ public class DisableEntityTest {
 		entity.disable();
 
 		world.loopStart();
-		
+
 		entity.enable();
-		
+
 		mockSystemA.reset();
 
 		world.loopStart();
-		
+
 		assertTrue(mockSystemA.enabledEntities.contains(entity));
 		assertFalse(mockSystemA.disabledEntities.contains(entity));
 		assertFalse(mockSystemA.addedEntities.contains(entity));
 		assertFalse(mockSystemA.removedEntities.contains(entity));
 	}
-	
+
 	@Test
 	public void shouldProcessEntityIfEnabled() {
 		World world = new World();
@@ -267,16 +274,16 @@ public class DisableEntityTest {
 		entity.refresh();
 
 		world.loopStart();
-		
+
 		assertFalse(mockSystemA.processedEntities.contains(entity));
-		
+
 		mockSystemA.process();
-		
+
 		assertTrue(mockSystemA.processedEntities.contains(entity));
 	}
-	
+
 	@Test
-	public void shouldNotProcessEntityIfDisabledwhenAdded() { 
+	public void shouldNotProcessEntityIfDisabledwhenAdded() {
 		World world = new World();
 
 		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
@@ -290,16 +297,16 @@ public class DisableEntityTest {
 		entity.refresh();
 
 		world.loopStart();
-		
+
 		assertFalse(mockSystemA.processedEntities.contains(entity));
-		
+
 		mockSystemA.process();
-		
+
 		assertFalse(mockSystemA.processedEntities.contains(entity));
 	}
-	
+
 	@Test
-	public void shouldNotProcessEntityIfDisabledOnTheRun() { 
+	public void shouldNotProcessEntityIfDisabledOnTheRun() {
 		World world = new World();
 
 		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
@@ -312,16 +319,50 @@ public class DisableEntityTest {
 		entity.refresh();
 
 		world.loopStart();
-		
+
 		assertFalse(mockSystemA.processedEntities.contains(entity));
-		
+
 		entity.disable();
 		world.loopStart();
-		
+
 		mockSystemA.process();
-		
+
 		assertFalse(mockSystemA.processedEntities.contains(entity));
 	}
-	
+
+	int processCalls;
+
+	@Test
+	public void shouldNotAddToActivesTwiceWhenEntityRefreshed() {
+		World world = new World();
+
+		processCalls = 0;
+
+		final EntitySystem entitySystem = new EntityProcessingSystem(ComponentA.class) {
+			@Override
+			protected void process(Entity e) {
+				processCalls++;
+			}
+		};
+
+		world.getSystemManager().setSystem(entitySystem);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+
+		world.loopStart();
+
+		entity.refresh();
+		world.loopStart();
+
+		entity.refresh();
+		world.loopStart();
+
+		entitySystem.process();
+
+		assertThat(processCalls, IsEqual.equalTo(1));
+	}
 
 }

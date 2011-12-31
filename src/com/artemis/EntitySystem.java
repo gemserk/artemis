@@ -126,7 +126,6 @@ public abstract class EntitySystem {
 	}
 
 	private void add(Entity e) {
-		// actives.add(e);
 		e.addSystemBit(systemBit);
 		added(e);
 		if (e.isEnabled())
@@ -134,12 +133,13 @@ public abstract class EntitySystem {
 	}
 
 	private void enable(Entity e) {
+		if (actives.contains(e))
+			return;
 		actives.add(e);
 		enabled(e);
 	}
 
 	private void remove(Entity e) {
-		// actives.remove(e);
 		e.removeSystemBit(systemBit);
 		if (e.isEnabled())
 			disable(e);
@@ -147,6 +147,8 @@ public abstract class EntitySystem {
 	}
 
 	private void disable(Entity e) {
+		if (!actives.contains(e))
+			return;
 		disabled(e);
 		actives.remove(e);
 	}
