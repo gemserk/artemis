@@ -276,7 +276,7 @@ public class DisableEntityTest {
 	}
 	
 	@Test
-	public void shouldNotProcessEntityIfDisabled() { 
+	public void shouldNotProcessEntityIfDisabledwhenAdded() { 
 		World world = new World();
 
 		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
@@ -292,6 +292,31 @@ public class DisableEntityTest {
 		world.loopStart();
 		
 		assertFalse(mockSystemA.processedEntities.contains(entity));
+		
+		mockSystemA.process();
+		
+		assertFalse(mockSystemA.processedEntities.contains(entity));
+	}
+	
+	@Test
+	public void shouldNotProcessEntityIfDisabledOnTheRun() { 
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+
+		world.loopStart();
+		
+		assertFalse(mockSystemA.processedEntities.contains(entity));
+		
+		entity.disable();
+		world.loopStart();
 		
 		mockSystemA.process();
 		

@@ -119,9 +119,9 @@ public abstract class EntitySystem {
 		else if (!interest && contains && typeFlags > 0)
 			remove(e);
 		else if (interest && contains && e.isEnabled() && typeFlags > 0)
-			enabled(e);
+			enable(e);
 		else if (interest && contains && !e.isEnabled() && typeFlags > 0)
-			disabled(e);
+			disable(e);
 
 	}
 
@@ -129,12 +129,11 @@ public abstract class EntitySystem {
 		// actives.add(e);
 		e.addSystemBit(systemBit);
 		added(e);
-		enable(e);
+		if (e.isEnabled())
+			enable(e);
 	}
 
 	private void enable(Entity e) {
-		if (!e.isEnabled())
-			return;
 		actives.add(e);
 		enabled(e);
 	}
@@ -142,13 +141,12 @@ public abstract class EntitySystem {
 	private void remove(Entity e) {
 		// actives.remove(e);
 		e.removeSystemBit(systemBit);
-		disable(e);
+		if (e.isEnabled())
+			disable(e);
 		removed(e);
 	}
 
 	private void disable(Entity e) {
-		if (!e.isEnabled())
-			return;
 		disabled(e);
 		actives.remove(e);
 	}
