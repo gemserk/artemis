@@ -1,6 +1,7 @@
 package com.artemis;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +26,7 @@ public class DisableEntityTest {
 		public Set<Entity> removedEntities = new HashSet<Entity>();
 		public Set<Entity> enabledEntities = new HashSet<Entity>();
 		public Set<Entity> disabledEntities = new HashSet<Entity>();
+		public Set<Entity> processedEntities = new HashSet<Entity>();
 		
 		public MockEntityProcessingSystem(Class<? extends Component> requiredType) {
 			super(requiredType);
@@ -41,6 +43,7 @@ public class DisableEntityTest {
 			removedEntities.clear();
 			enabledEntities.clear();
 			disabledEntities.clear();
+			processedEntities.clear();
 		}
 
 		@Override
@@ -69,7 +72,7 @@ public class DisableEntityTest {
 
 		@Override
 		protected void process(Entity e) {
-
+			processedEntities.add(e);
 		}
 
 	}
@@ -251,12 +254,49 @@ public class DisableEntityTest {
 	}
 	
 	@Test
-	public void shouldNotProcessEntityIfDisabled() { 
-		fail("not implemented yet");
+	public void shouldProcessEntityIfEnabled() {
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.refresh();
+
+		world.loopStart();
+		
+		assertFalse(mockSystemA.processedEntities.contains(entity));
+		
+		mockSystemA.process();
+		
+		assertTrue(mockSystemA.processedEntities.contains(entity));
 	}
 	
 	@Test
-	public void shouldProcessEntityIfEnabled() { 
-		fail("not implemented yet");
+	public void shouldNotProcessEntityIfDisabled() { 
+		World world = new World();
+
+		MockEntityProcessingSystem mockSystemA = new MockEntityProcessingSystem(ComponentA.class);
+
+		world.getSystemManager().setSystem(mockSystemA);
+		world.getSystemManager().initializeAll();
+
+		Entity entity = world.createEntity();
+		entity.addComponent(new ComponentA());
+		entity.disable();
+		entity.refresh();
+
+		world.loopStart();
+		
+		assertFalse(mockSystemA.processedEntities.contains(entity));
+		
+		mockSystemA.process();
+		
+		assertFalse(mockSystemA.processedEntities.contains(entity));
 	}
+	
+
 }
