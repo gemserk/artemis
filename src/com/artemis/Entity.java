@@ -117,6 +117,7 @@ public final class Entity {
 	 */
 	public void addComponent(Component component) {
 		entityManager.addComponent(this, component);
+		refresh();
 	}
 
 	/**
@@ -127,6 +128,7 @@ public final class Entity {
 	 */
 	public void removeComponent(Component component) {
 		entityManager.removeComponent(this, component);
+		refresh();
 	}
 
 	/**
@@ -137,6 +139,7 @@ public final class Entity {
 	 */
 	public void removeComponent(ComponentType type) {
 		entityManager.removeComponent(this, type);
+		refresh();
 	}
 
 	/**
