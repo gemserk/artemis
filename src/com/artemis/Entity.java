@@ -21,16 +21,25 @@ public final class Entity {
 	
 	boolean refreshPending;
 
+	/**
+	 * Returns true if the Entity is enabled, false otherwise.
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * Enables the Entity to let it be processed by each EntitySystem having it. 
+	 */
 	public void enable() {
 		if (!enabled)
 			refresh();
 		enabled = true;
 	}
 
+	/**
+	 * Disables the Entity to avoid it to be processed by each EntitySystem having it.
+	 */
 	public void disable() {
 		if (enabled)
 			refresh();
@@ -42,6 +51,7 @@ public final class Entity {
 		this.entityManager = world.getEntityManager();
 		this.id = id;
 		this.enabled = true;
+		this.refreshPending = false;
 		refresh();
 	}
 
