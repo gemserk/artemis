@@ -208,6 +208,7 @@ public final class Entity {
 	 * Delete this entity from the world.
 	 */
 	public void delete() {
+		this.enabled = true;
 		world.deleteEntity(this);
 	}
 
