@@ -112,6 +112,7 @@ public final class Entity {
 	protected void reset() {
 		systemBits = 0;
 		typeBits = 0;
+		enable();
 	}
 
 	@Override
@@ -208,7 +209,6 @@ public final class Entity {
 	 * Delete this entity from the world.
 	 */
 	public void delete() {
-		this.enabled = true;
 		world.deleteEntity(this);
 	}
 
