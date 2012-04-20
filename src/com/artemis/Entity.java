@@ -161,6 +161,10 @@ public final class Entity {
 	public boolean isActive() {
 		return entityManager.isActive(id);
 	}
+	
+	public boolean isAlive() {
+		return (world.getEntity(id) != null);
+	}
 
 	/**
 	 * This is the preferred method to use when retrieving a component from a entity. It will provide good performance.
@@ -209,6 +213,8 @@ public final class Entity {
 	 * Delete this entity from the world.
 	 */
 	public void delete() {
+		disable();
+		// should disable too to do the same logic as the Entity.delete().
 		world.deleteEntity(this);
 	}
 
