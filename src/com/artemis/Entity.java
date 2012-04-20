@@ -18,7 +18,7 @@ public final class Entity {
 	private EntityManager entityManager;
 
 	private boolean enabled;
-	
+
 	boolean refreshPending;
 
 	/**
@@ -29,7 +29,7 @@ public final class Entity {
 	}
 
 	/**
-	 * Enables the Entity to let it be processed by each EntitySystem having it. 
+	 * Enables the Entity to let it be processed by each EntitySystem having it.
 	 */
 	public void enable() {
 		if (!enabled)
@@ -161,7 +161,7 @@ public final class Entity {
 	public boolean isActive() {
 		return entityManager.isActive(id);
 	}
-	
+
 	public boolean isAlive() {
 		return (world.getEntity(id) != null);
 	}
@@ -213,8 +213,6 @@ public final class Entity {
 	 * Delete this entity from the world.
 	 */
 	public void delete() {
-		disable();
-		// should disable too to do the same logic as the Entity.delete().
 		world.deleteEntity(this);
 	}
 

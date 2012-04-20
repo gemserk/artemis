@@ -23,4 +23,20 @@ public class EntityShouldBeDisabledWhenDeletedTest {
 		assertFalse(entity.isEnabled());
 	}
 	
+	@Test
+	public void shouldBeDisabledIfDeleted2() {
+		World world = new World();
+		Entity entity = world.createEntity();
+		
+		world.loopStart();
+		
+		assertTrue(entity.isEnabled());
+		
+		world.deleteEntity(entity);
+		world.loopStart();
+		
+		assertFalse(entity.isAlive());
+		assertFalse(entity.isEnabled());
+	}
+	
 }
