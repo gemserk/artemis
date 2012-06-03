@@ -72,8 +72,10 @@ public class Bag<E> implements ImmutableBag<E> {
 	 * @return <tt>true</tt> if this list contained the specified element
 	 */
 	public boolean remove(E o) {
+		Object o1;
+		
 		for (int i = 0; i < size; i++) {
-			Object o1 = data[i];
+			o1 = data[i];
 
 			if (o == o1) {
 				data[i] = data[--size]; // overwrite item to remove with last
@@ -111,12 +113,13 @@ public class Bag<E> implements ImmutableBag<E> {
 	 */
 	public boolean removeAll(Bag<E> bag) {
 		boolean modified = false;
+		Object o1, o2;
 
-		for (int i = 0; i < bag.size(); i++) {
-			Object o1 = bag.get(i);
+		for (int i = 0, s = bag.size(); i < s; i++) {
+			o1 = bag.get(i);
 
 			for (int j = 0; j < size; j++) {
-				Object o2 = data[j];
+				o2 = data[j];
 
 				if (o1 == o2) {
 					remove(j);
@@ -229,7 +232,7 @@ public class Bag<E> implements ImmutableBag<E> {
 	 * @param added
 	 */
 	public void addAll(Bag<E> items) {
-		for(int i = 0; items.size() > i; i++) {
+		for(int i = 0, s = items.size(); s > i; i++) {
 			add(items.get(i));
 		}
 	}
