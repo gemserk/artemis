@@ -58,8 +58,10 @@ public class EntityManager {
 	}
 
 	private void removeComponentsOfEntity(Entity e) {
-		for(int a = 0; componentsByType.size() > a; a++) {
-			Bag<Component> components = componentsByType.get(a);
+		Bag<Component> components;
+		
+		for(int a = 0, s = componentsByType.size(); s > a; a++) {
+			components = componentsByType.get(a);
 			if(components != null && e.getId() < components.size()) {
 				components.set(e.getId(), null);
 			}
@@ -97,7 +99,7 @@ public class EntityManager {
 	protected void refresh(Entity e) {
 		SystemManager systemManager = world.getSystemManager();
 		Bag<EntitySystem> systems = systemManager.getSystems();
-		for(int i = 0, s=systems.size(); s > i; i++) {
+		for(int i = 0, s = systems.size(); s > i; i++) {
 			systems.get(i).change(e);
 		}
 	}
@@ -156,10 +158,13 @@ public class EntityManager {
 
 	protected ImmutableBag<Component> getComponents(Entity e) {
 		entityComponents.clear();
-		for(int a = 0; componentsByType.size() > a; a++) {
-			Bag<Component> components = componentsByType.get(a);
+		
+		Bag<Component> components;
+		Component component;
+		for(int a = 0, s = componentsByType.size(); s > a; a++) {
+			components = componentsByType.get(a);
 			if(components != null && e.getId() < components.size()) {
-				Component component = components.get(e.getId());
+				component = components.get(e.getId());
 				if(component != null) {
 					entityComponents.add(component);
 				}

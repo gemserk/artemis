@@ -48,7 +48,7 @@ public class SystemManager {
 	 * After adding all systems to the world, you must initialize them all.
 	 */
 	public void initializeAll() {
-	   for (int i = 0; i < bagged.size(); i++) {
+	   for (int i = 0, s = bagged.size(); i < s; i++) {
 	      bagged.get(i).initialize();
 	   }
 	} 

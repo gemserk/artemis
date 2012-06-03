@@ -106,7 +106,7 @@ public class World {
 	 */
 	public void loopStart() {
 		if(!refreshed.isEmpty()) {
-			for(int i = 0; refreshed.size() > i; i++) {
+			for(int i = 0, s = refreshed.size(); s > i; i++) {
 				Entity e = refreshed.get(i);
 				entityManager.refresh(e);
 				e.refreshPending = false;
@@ -115,7 +115,7 @@ public class World {
 		} 
 		
 		if(!deleted.isEmpty()) {
-			for(int i = 0; deleted.size() > i; i++) {
+			for(int i = 0, s = deleted.size(); s > i; i++) {
 				Entity e = deleted.get(i);
 				groupManager.remove(e);
 				entityManager.remove(e);
