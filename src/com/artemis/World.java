@@ -114,7 +114,11 @@ public class World {
 	 * @return entity
 	 */
 	public Entity createEntity() {
-		return entityManager.create();
+		Entity e = entityManager.create();
+		for (Manager manager : managers.values()) {
+			manager.addEntity(e);
+		}
+		return e;
 	}
 	
 	/**
@@ -133,6 +137,9 @@ public class World {
 		if(!refreshed.isEmpty()) {
 			for(int i = 0; refreshed.size() > i; i++) {
 				entityManager.refresh(refreshed.get(i));
+				for (Manager manager : managers.values()) {
+					manager.refresh(refreshed.get(i));
+				}
 			}
 			refreshed.clear();
 		}
@@ -143,6 +150,9 @@ public class World {
 				groupManager.remove(e);
 				entityManager.remove(e);
 				tagManager.remove(e);
+				for (Manager manager : managers.values()) {
+					manager.removeEntity(e);
+				}
 			}
 			deleted.clear();
 		}
