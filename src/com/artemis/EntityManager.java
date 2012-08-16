@@ -12,19 +12,24 @@ public class EntityManager {
 	private long uniqueEntityId;
 	private long totalCreated;
 	private long totalRemoved;
-	
+
 	private Bag<Bag<Component>> componentsByType;
-	
+
 	private Bag<Component> entityComponents; // Added for debug support.
 
 	public EntityManager(World world) {
 		this.world = world;
-		
+
 		activeEntities = new Bag<Entity>();
 		removedAndAvailable = new Bag<Entity>();
-		
+
 		componentsByType = new Bag<Bag<Component>>();
-		
+
+		// int maxComponents = 64;
+		int maxComponents = Long.SIZE;
+		for (int i = 0; i < maxComponents; i++)
+			componentsByType.add(new Bag<Component>());
+
 		entityComponents = new Bag<Component>();
 	}
 
@@ -36,7 +41,7 @@ public class EntityManager {
 			e.reset();
 		}
 		e.setUniqueId(uniqueEntityId++);
-		activeEntities.set(e.getId(),e);
+		activeEntities.set(e.getId(), e);
 		count++;
 		totalCreated++;
 		return e;
@@ -44,13 +49,13 @@ public class EntityManager {
 
 	protected void remove(Entity e) {
 		activeEntities.set(e.getId(), null);
-		
+
 		e.setTypeBits(0);
-		
+
 		refresh(e);
-		
+
 		removeComponentsOfEntity(e);
-		
+
 		count--;
 		totalRemoved++;
 
@@ -58,14 +63,14 @@ public class EntityManager {
 	}
 
 	private void removeComponentsOfEntity(Entity e) {
-		for(int a = 0; componentsByType.size() > a; a++) {
+		for (int a = 0; componentsByType.size() > a; a++) {
 			Bag<Component> components = componentsByType.get(a);
-			if(components != null && e.getId() < components.size()) {
+			if (components != null && e.getId() < components.size()) {
 				components.set(e.getId(), null);
 			}
 		}
 	}
-	
+
 	/**
 	 * Check if this entity is active, or has been deleted, within the framework.
 	 * 
@@ -75,61 +80,64 @@ public class EntityManager {
 	public boolean isActive(int entityId) {
 		return activeEntities.get(entityId) != null;
 	}
-	
+
 	protected void addComponent(Entity e, Component component) {
 		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
-		
-		if(type.getId() >= componentsByType.getCapacity()) {
-			componentsByType.set(type.getId(), null);
-		}
-		
+
+		// if (type.getId() >= componentsByType.getCapacity()) {
+		// componentsByType.set(type.getId(), null);
+		// }
+
 		Bag<Component> components = componentsByType.get(type.getId());
-		if(components == null) {
-			components = new Bag<Component>();
-			componentsByType.set(type.getId(), components);
-		}
 		
+		// if (components == null) {
+		// components = new Bag<Component>();
+		// componentsByType.set(type.getId(), components);
+		// }
+
 		components.set(e.getId(), component);
 
 		e.addTypeBit(type.getBit());
 	}
-	
+
 	protected void refresh(Entity e) {
 		SystemManager systemManager = world.getSystemManager();
 		Bag<EntitySystem> systems = systemManager.getSystems();
-		for(int i = 0, s=systems.size(); s > i; i++) {
+		for (int i = 0, s = systems.size(); s > i; i++) {
 			systems.get(i).change(e);
 		}
 	}
-	
+
 	protected void removeComponent(Entity e, Component component) {
 		ComponentType type = ComponentTypeManager.getTypeFor(component.getClass());
 		removeComponent(e, type);
 	}
-	
+
 	protected void removeComponent(Entity e, ComponentType type) {
 		Bag<Component> components = componentsByType.get(type.getId());
 		components.set(e.getId(), null);
 		e.removeTypeBit(type.getBit());
 	}
-	
-	protected Component getComponent(Entity e, ComponentType type) {
-		int componentTypeId = type.getId();
 
+	public Component getComponent(Entity e, ComponentType type) {
+		return getComponent(e, type.getId());
+	}
+
+	public Component getComponent(Entity e, int componentTypeId) {
 		// if asking for a component type never added before, then return null directly
-		if (componentTypeId >= componentsByType.getCapacity())
-			return null;
-		
+		// if (componentTypeId >= componentsByType.getCapacity())
+		// return null;
 		Bag<Component> bag = componentsByType.get(componentTypeId);
-		if(bag != null && e.getId() < bag.getCapacity())
-			return bag.get(e.getId());
+		int entityId = e.getId();
+		if (entityId < bag.getCapacity())
+			return bag.get(entityId);
 		return null;
 	}
-	
+
 	protected Entity getEntity(int entityId) {
 		return activeEntities.get(entityId);
 	}
-	
+
 	/**
 	 * 
 	 * @return how many entities are currently active.
@@ -137,7 +145,7 @@ public class EntityManager {
 	public int getEntityCount() {
 		return count;
 	}
-	
+
 	/**
 	 * 
 	 * @return how many entities have been created since start.
@@ -145,7 +153,7 @@ public class EntityManager {
 	public long getTotalCreated() {
 		return totalCreated;
 	}
-	
+
 	/**
 	 * 
 	 * @return how many entities have been removed since start.
@@ -156,11 +164,11 @@ public class EntityManager {
 
 	protected ImmutableBag<Component> getComponents(Entity e) {
 		entityComponents.clear();
-		for(int a = 0; componentsByType.size() > a; a++) {
+		for (int a = 0; componentsByType.size() > a; a++) {
 			Bag<Component> components = componentsByType.get(a);
-			if(components != null && e.getId() < components.size()) {
+			if (components != null && e.getId() < components.size()) {
 				Component component = components.get(e.getId());
-				if(component != null) {
+				if (component != null) {
 					entityComponents.add(component);
 				}
 			}

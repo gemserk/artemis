@@ -171,10 +171,19 @@ public final class Entity {
 	 * 
 	 * @param type
 	 *            in order to retrieve the component fast you must provide a ComponentType instance for the expected component.
-	 * @return
 	 */
 	public Component getComponent(ComponentType type) {
-		return entityManager.getComponent(this, type);
+		return entityManager.getComponent(this, type.getId());
+	}
+
+	/**
+	 * This is the preferred method to use when retrieving a component from a entity. It will provide good performance.
+	 * 
+	 * @param componentTypeId
+	 *            in order to retrieve the component fast you must provide a ComponentType identifier instance for the expected component.
+	 */
+	public Component getComponent(int componentTypeId) {
+		return entityManager.getComponent(this, componentTypeId);
 	}
 
 	/**
