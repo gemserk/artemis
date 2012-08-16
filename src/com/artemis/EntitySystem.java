@@ -63,16 +63,17 @@ public abstract class EntitySystem {
 	protected abstract void processEntities(ImmutableBag<Entity> entities);
 
 	/**
-	 * 
-	 * @return true if the system should be processed, false if not.
+	 * Return true if the system should be processed, false otherwise.
 	 */
-	protected abstract boolean checkProcessing();
+	protected boolean checkProcessing() {
+		return true;
+	}
 
 	/**
 	 * Override to implement code that gets executed when systems are initialized.
 	 */
 	protected void initialize() {
-	};
+	}
 
 	/**
 	 * Called if the system has received a entity it is interested in, e.g. created or a component was added to it.
@@ -81,7 +82,7 @@ public abstract class EntitySystem {
 	 *            the entity that was added to this system.
 	 */
 	protected void added(Entity e) {
-	};
+	}
 
 	/**
 	 * Called if the entity was enabled.
@@ -90,7 +91,7 @@ public abstract class EntitySystem {
 	 *            the entity that was enabled.
 	 */
 	protected void enabled(Entity e) {
-	};
+	}
 
 	/**
 	 * Called if the entity was disabled.
@@ -99,7 +100,7 @@ public abstract class EntitySystem {
 	 *            the entity that was disabled.
 	 */
 	protected void disabled(Entity e) {
-	};
+	}
 
 	/**
 	 * Called if a entity was removed from this system, e.g. deleted or had one of it's components removed.
@@ -108,7 +109,7 @@ public abstract class EntitySystem {
 	 *            the entity that was removed from this system.
 	 */
 	protected void removed(Entity e) {
-	};
+	}
 
 	protected void change(Entity e) {
 		boolean contains = (systemBit & e.getSystemBits()) == systemBit;
