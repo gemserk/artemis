@@ -114,14 +114,15 @@ public abstract class EntitySystem {
 	protected void change(Entity e) {
 		boolean contains = (systemBit & e.getSystemBits()) == systemBit;
 		boolean interest = (typeFlags & e.getTypeBits()) == typeFlags;
+		boolean alreadyEnabled = (systemBit & e.getSystemEnabledBits()) == systemBit;
 
 		if (interest && !contains && typeFlags > 0)
 			add(e);
 		else if (!interest && contains && typeFlags > 0)
 			remove(e);
-		else if (interest && contains && e.isEnabled() && typeFlags > 0)
+		else if (interest && contains && !alreadyEnabled && e.isEnabled() &&  typeFlags > 0)
 			enable(e);
-		else if (interest && contains && !e.isEnabled() && typeFlags > 0)
+		else if (interest && contains && alreadyEnabled && !e.isEnabled() && typeFlags > 0)
 			disable(e);
 
 	}
@@ -134,8 +135,7 @@ public abstract class EntitySystem {
 	}
 
 	private void enable(Entity e) {
-		if (actives.contains(e))
-			return;
+		e.addSystemEnabledBit(systemBit);
 		actives.add(e);
 		enabled(e);
 	}
@@ -148,8 +148,7 @@ public abstract class EntitySystem {
 	}
 
 	private void disable(Entity e) {
-		if (!actives.contains(e))
-			return;
+		e.removeSystemEnabledBit(systemBit);
 		disabled(e);
 		actives.remove(e);
 	}

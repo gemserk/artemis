@@ -13,6 +13,7 @@ public final class Entity {
 	private long uniqueId;
 	private long typeBits;
 	private long systemBits;
+	private long systemEnabledBits;
 
 	private World world;
 	private EntityManager entityManager;
@@ -103,6 +104,22 @@ public final class Entity {
 
 	protected void setSystemBits(long systemBits) {
 		this.systemBits = systemBits;
+	}
+	
+	protected long getSystemEnabledBits() {
+		return systemEnabledBits;
+	}
+
+	protected void addSystemEnabledBit(long bit) {
+		systemEnabledBits |= bit;
+	}
+
+	protected void removeSystemEnabledBit(long bit) {
+		systemEnabledBits &= ~bit;
+	}
+
+	protected void setSystemEnabledBits(long systemEnabledBits) {
+		this.systemEnabledBits = systemBits;
 	}
 
 	protected void setTypeBits(long typeBits) {
