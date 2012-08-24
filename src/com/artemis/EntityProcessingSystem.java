@@ -1,7 +1,6 @@
 package com.artemis;
 
 import com.artemis.utils.Bag;
-import com.artemis.utils.ImmutableBag;
 
 /**
  * A typical entity system. Use this when you need to process entities possessing the
