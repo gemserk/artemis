@@ -1,5 +1,6 @@
 package com.artemis;
 
+import com.artemis.utils.Bag;
 import com.artemis.utils.ImmutableBag;
 
 /**
@@ -10,6 +11,8 @@ import com.artemis.utils.ImmutableBag;
  *
  */
 public abstract class EntityProcessingSystem extends EntitySystem {
+	
+	Bag<Entity> actives = new Bag<Entity>();
 	
 	/**
 	 * Create a new EntityProcessingSystem. It requires at least one component.
@@ -27,11 +30,23 @@ public abstract class EntityProcessingSystem extends EntitySystem {
 	protected abstract void process(Entity e);
 
 	@Override
-	protected final void processEntities(ImmutableBag<Entity> entities) {
-		for (int i = 0, s = entities.size(); s > i; i++) {
-			process(entities.get(i));
+	protected final void processEntities() {
+		for (int i = 0, s = actives.size(); s > i; i++) {
+			process(actives.get(i));
 		}
 	}
+	
+	@Override
+	protected void enabled(Entity e) {
+		actives.add(e);
+	}
+	
+	@Override
+	protected void disabled(Entity e) {
+		actives.remove(e);
+	}
+	
+	
 	
 	@Override
 	protected boolean checkProcessing() {

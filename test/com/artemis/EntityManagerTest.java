@@ -18,7 +18,7 @@ public class EntityManagerTest {
 		}
 
 		@Override
-		protected void processEntities(ImmutableBag<Entity> entities) {
+		protected void processEntities() {
 			
 		}
 

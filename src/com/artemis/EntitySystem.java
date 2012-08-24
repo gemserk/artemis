@@ -16,14 +16,10 @@ public abstract class EntitySystem {
 
 	protected World world;
 
-	private Bag<Entity> actives;
-
 	public EntitySystem() {
 	}
 
 	public EntitySystem(Class<? extends Component>... types) {
-		actives = new Bag<Entity>();
-
 		for (Class<? extends Component> type : types) {
 			ComponentType ct = ComponentTypeManager.getTypeFor(type);
 			typeFlags |= ct.getBit();
@@ -43,7 +39,7 @@ public abstract class EntitySystem {
 	public final void process() {
 		if (checkProcessing()) {
 			begin();
-			processEntities(actives);
+			processEntities();
 			end();
 		}
 	}
@@ -60,7 +56,7 @@ public abstract class EntitySystem {
 	 * @param entities
 	 *            the entities this system contains.
 	 */
-	protected abstract void processEntities(ImmutableBag<Entity> entities);
+	protected abstract void processEntities();
 
 	/**
 	 * Return true if the system should be processed, false otherwise.
@@ -136,7 +132,6 @@ public abstract class EntitySystem {
 
 	private void enable(Entity e) {
 		e.addSystemEnabledBit(systemBit);
-		actives.add(e);
 		enabled(e);
 	}
 
@@ -150,7 +145,6 @@ public abstract class EntitySystem {
 	private void disable(Entity e) {
 		e.removeSystemEnabledBit(systemBit);
 		disabled(e);
-		actives.remove(e);
 	}
 
 	protected final void setWorld(World world) {
